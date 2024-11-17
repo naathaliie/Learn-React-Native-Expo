@@ -42,13 +42,12 @@ const styles = StyleSheet.create({
   savedCatItem: {
     margin: 5,
     padding: 10,
-    backgroundColor: "plum",
+    backgroundColor: "rgba(255, 165, 0, 0.5)",
     borderWidth: 1,
     borderRadius: 15,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    width: "100%",
   },
   feedBox: {},
   feedBtn: {
