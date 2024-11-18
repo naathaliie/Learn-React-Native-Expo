@@ -1,11 +1,11 @@
-import { View, Text, TouchableHighlight, StyleSheet } from "react-native";
+import { Text, TouchableHighlight, StyleSheet } from "react-native";
 
 type TouchableBtnProps = {
   title: string;
   colorBackground: string;
   colorUnderlay: string;
   placement?: "left" | "center" | "right"; //placering av knappen
-  onClickFunction?: () => void;
+  onClickFunction?: () => void | Function;
 };
 
 const TouchableBtn = ({

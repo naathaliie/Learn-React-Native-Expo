@@ -1,5 +1,13 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  Animated,
+  PanResponder,
+} from "react-native";
 import { oneCat } from "../../types";
+import { useRef, useState } from "react";
 
 type CatCardItemProps = {
   oneCat: oneCat;
@@ -8,8 +16,49 @@ type CatCardItemProps = {
 };
 
 const CatItemCard = ({ oneCat, feedCat, deleteCat }: CatCardItemProps) => {
+  const pan = useRef(new Animated.ValueXY()).current; // För att hålla koll på swipe-rörelsen
+  const [swiped, setSwiped] = useState(false); // Håller koll på om kortet har svepts långt nog
+
+  // Skapa PanResponder för att fånga rörelser
+  const panResponder = PanResponder.create({
+    onStartShouldSetPanResponder: () => true,
+    onPanResponderMove: Animated.event(
+      [
+        null, // Vi ignorerar y-riktningen
+        { dx: pan.x }, // Koppla x-rörelsen till pan.x
+      ],
+      { useNativeDriver: false }
+    ),
+    onPanResponderRelease: (e, gestureState) => {
+      const { dx } = gestureState;
+
+      if (dx > 120) {
+        setSwiped(true);
+        feedCat(oneCat.id); // Mata katten om sveps åt höger
+      } else if (dx < -120) {
+        setSwiped(true);
+        deleteCat(oneCat.id); // Radera katten om sveps åt vänster
+      }
+
+      // Återställ positionen på kortet om ingen åtgärd tas
+      Animated.spring(pan, {
+        toValue: { x: 0, y: 0 },
+        useNativeDriver: true,
+      }).start();
+    },
+  });
+
   return (
-    <View key={oneCat.id} style={styles.savedCatItem}>
+    <Animated.View
+      key={oneCat.id}
+      {...panResponder.panHandlers} // Lägg till PanResponder för swipe
+      style={[
+        styles.savedCatItem,
+        {
+          transform: [{ translateX: pan.x }], // Använd animerad värde för att flytta kortet
+        },
+      ]}
+    >
       <View style={styles.feedBox}>
         <Text>Fått mat? {oneCat.hasBeenFed ? "😍" : "🙁"}</Text>
         <Pressable
@@ -34,7 +83,7 @@ const CatItemCard = ({ oneCat, feedCat, deleteCat }: CatCardItemProps) => {
       >
         <Text>❌</Text>
       </Pressable>
-    </View>
+    </Animated.View>
   );
 };
 

@@ -1,4 +1,3 @@
-import { transform } from "@babel/core";
 import { useState } from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Animated } from "react-native";
@@ -7,7 +6,7 @@ type MainBtnProps = {
   title: string;
   colorBackground: string;
   placement?: "left" | "center" | "right"; //placering av knappen
-  onClickFunction?: () => void;
+  onClickFunction?: () => void | Function;
 };
 
 const MainBtn = ({
