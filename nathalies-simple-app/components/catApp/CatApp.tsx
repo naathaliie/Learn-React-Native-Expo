@@ -11,16 +11,13 @@ import {
 } from "react-native";
 import { oneCat, savedCats } from "../../types";
 import CatItemCard from "./CatItemCard";
-
 const CatApp = () => {
   const [textFromNameField, setTextFromNameField] = useState<string>("");
   const [textFromAgeField, setTextFromAgeField] = useState<
     string | undefined
   >();
-
   //Skapar upp en egen idGenerator som inte omställs vid varje rendering(lägg till/ta bort katt)
-  const idGenerator = useRef(100);
-
+  const idGenerator = useRef(1007);
   //Alla sparade katter
   const [savedCats, setSavedCats] = useState<savedCats>([
     {
@@ -60,7 +57,6 @@ const CatApp = () => {
       hasBeenFed: false,
     },
   ]);
-
   function addCatToList() {
     if (textFromNameField !== "") {
       if (textFromAgeField !== undefined) {
@@ -70,7 +66,6 @@ const CatApp = () => {
           age: textFromAgeField,
           hasBeenFed: false,
         };
-
         setSavedCats((prevCats) => {
           return [...prevCats, newCat];
         });
@@ -80,25 +75,20 @@ const CatApp = () => {
     } else {
       Alert.alert("Du måste fylla i kattens namn");
     }
-
     setTextFromNameField("");
     setTextFromAgeField(undefined);
   }
-
   function deleteCat(catId: number) {
     setSavedCats((prevCats) => {
       return prevCats.filter((cat) => cat.id !== catId);
     });
   }
-
   function feedCat(catId: number) {
     const updatedCatList = savedCats.map((cat) =>
       cat.id === catId ? { ...cat, hasBeenFed: !cat.hasBeenFed } : cat
     );
-
     setSavedCats(updatedCatList);
   }
-
   return (
     <View style={styles.container}>
       <View>
@@ -150,7 +140,6 @@ const CatApp = () => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -166,7 +155,6 @@ const styles = StyleSheet.create({
   inputField: {
     borderWidth: 1,
   },
-
   addCatBtn: {
     borderWidth: 1,
     margin: 15,
@@ -207,5 +195,4 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
 });
-
 export default CatApp;

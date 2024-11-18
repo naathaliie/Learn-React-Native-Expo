@@ -1,26 +1,20 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-
+import MainBtn from "./ui/MainBtn";
 const Footer = () => {
   return (
     <View style={styles.container}>
-      <Pressable style={styles.btn}>
-        <Text>Mata katt</Text>
-      </Pressable>
+      <MainBtn title="Mata Katt" colorBackground="skyblue" placement="center" />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "rgba(255, 165, 0, 0.8)",
     padding: 10,
     flex: 1,
     borderWidth: 1,
     alignSelf: "center",
-  },
-  btn: {
-    justifyContent: "center",
+    width: "100%",
+    backgroundColor: "orange",
   },
 });
-
 export default Footer;
