@@ -13,7 +13,6 @@ const Footer = () => {
 };
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
     flex: 1,
     borderWidth: 1,
     alignSelf: "center",

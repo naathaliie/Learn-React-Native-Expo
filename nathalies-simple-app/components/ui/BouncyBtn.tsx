@@ -1,12 +1,6 @@
 import { transform } from "@babel/core";
 import { useState } from "react";
-import {
-  Text,
-  Pressable,
-  StyleSheet,
-  View,
-  TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Animated } from "react-native";
 
 type MainBtnProps = {
@@ -80,6 +74,7 @@ const styles = StyleSheet.create({
   mainBtn: {
     borderWidth: 1,
     padding: 8,
+    margin: 10,
     borderRadius: 15,
     alignItems: "center",
     justifyContent: "center",

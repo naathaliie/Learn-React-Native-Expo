@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { oneCat, savedCats } from "../../types";
 import CatItemCard from "./CatItemCard";
+import TouchableBtn from "../ui/TouchableBtn";
 
 const CatApp = () => {
   const [textFromNameField, setTextFromNameField] = useState<string>("");
@@ -125,17 +126,13 @@ const CatApp = () => {
             ></TextInput>
           </View>
         </View>
-        <TouchableHighlight
-          onPress={() => {
-            addCatToList();
-          }}
-          style={styles.addCatBtn}
-          underlayColor={"#ccffcc"}
-        >
-          <View>
-            <Text>Lägg till katt</Text>
-          </View>
-        </TouchableHighlight>
+        <TouchableBtn
+          title="Lägg till katt"
+          colorBackground="lightgreen"
+          colorUnderlay="#ccffcc"
+          placement="right"
+          onClickFunction={addCatToList}
+        />
       </View>
       <FlatList
         data={savedCats}
