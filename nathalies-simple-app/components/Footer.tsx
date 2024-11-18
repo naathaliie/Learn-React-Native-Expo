@@ -1,9 +1,13 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import MainBtn from "./ui/MainBtn";
+import BouncyBtn from "./ui/BouncyBtn";
 const Footer = () => {
   return (
     <View style={styles.container}>
-      <MainBtn title="Mata Katt" colorBackground="skyblue" placement="center" />
+      <BouncyBtn
+        title="Mata Katt"
+        colorBackground="skyblue"
+        placement="center"
+      />
     </View>
   );
 };
