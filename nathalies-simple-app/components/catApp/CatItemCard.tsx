@@ -5,9 +5,9 @@ import {
   StyleSheet,
   Animated,
   PanResponder,
+  TouchableOpacity,
 } from "react-native";
 import { oneCat } from "../../types";
-import { useRef, useState } from "react";
 
 type CatCardItemProps = {
   oneCat: oneCat;
@@ -16,35 +16,34 @@ type CatCardItemProps = {
 };
 
 const CatItemCard = ({ oneCat, feedCat, deleteCat }: CatCardItemProps) => {
-  const pan = useRef(new Animated.ValueXY()).current; // För att hålla koll på swipe-rörelsen
-  const [swiped, setSwiped] = useState(false); // Håller koll på om kortet har svepts långt nog
-
-  // Skapa PanResponder för att fånga rörelser
+  const translateX = new Animated.Value(0);
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
-    onPanResponderMove: Animated.event(
-      [
-        null, // Vi ignorerar y-riktningen
-        { dx: pan.x }, // Koppla x-rörelsen till pan.x
-      ],
-      { useNativeDriver: false }
-    ),
-    onPanResponderRelease: (e, gestureState) => {
-      const { dx } = gestureState;
-
-      if (dx > 120) {
-        setSwiped(true);
-        feedCat(oneCat.id); // Mata katten om sveps åt höger
-      } else if (dx < -120) {
-        setSwiped(true);
-        deleteCat(oneCat.id); // Radera katten om sveps åt vänster
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: (e, gestureState) => {
+      if (gestureState.dx < 0) {
+        translateX.setValue(gestureState.dx);
+      } else if (gestureState.dx > 0) {
+        translateX.setValue(gestureState.dx);
       }
-
-      // Återställ positionen på kortet om ingen åtgärd tas
-      Animated.spring(pan, {
-        toValue: { x: 0, y: 0 },
-        useNativeDriver: true,
-      }).start();
+    },
+    onPanResponderRelease: (e, gestureState) => {
+      if (gestureState.dx < -50) {
+        Animated.spring(translateX, {
+          toValue: -100,
+          useNativeDriver: true,
+        }).start();
+      } else if (gestureState.dx > 50) {
+        Animated.spring(translateX, {
+          toValue: 100,
+          useNativeDriver: true,
+        }).start();
+      } else {
+        Animated.spring(translateX, {
+          toValue: 0,
+          useNativeDriver: true,
+        }).start();
+      }
     },
   });
 
@@ -54,41 +53,51 @@ const CatItemCard = ({ oneCat, feedCat, deleteCat }: CatCardItemProps) => {
       {...panResponder.panHandlers} // Lägg till PanResponder för swipe
       style={[
         styles.savedCatItem,
-        {
-          transform: [{ translateX: pan.x }], // Använd animerad värde för att flytta kortet
-        },
+        { flex: 1, transform: [{ translateX: translateX }] },
       ]}
     >
+      <TouchableOpacity
+        onPress={() => {
+          feedCat(oneCat.id);
+        }}
+        style={styles.feedButton}
+      >
+        <Text style={styles.feedButtonText}>Mata katten 🐠</Text>
+      </TouchableOpacity>
       <View style={styles.feedBox}>
         <Text>Fått mat? {oneCat.hasBeenFed ? "😍" : "🙁"}</Text>
-        <Pressable
-          style={styles.feedBtn}
-          onPress={() => {
-            feedCat(oneCat.id);
-          }}
-        >
-          <Text style={styles.feedText}>Ge 🐠</Text>
-        </Pressable>
       </View>
       <View style={styles.infoBox}>
         <Text style={styles.infoText}>Namn: {oneCat.name}</Text>
         <Text style={styles.infoText}>Älder: {oneCat.age}</Text>
         <Text> unikt-id: {oneCat.id}</Text>
       </View>
-      <Pressable
-        style={styles.deletebtn}
+      <TouchableOpacity
         onPress={() => {
           deleteCat(oneCat.id);
         }}
+        style={styles.deleteButton}
       >
-        <Text>❌</Text>
-      </Pressable>
+        <Text style={styles.deleteButtonText}>Radera</Text>
+      </TouchableOpacity>
     </Animated.View>
   );
 };
 
+{
+  /* <Pressable
+style={styles.deletebtn}
+onPress={() => {
+  deleteCat(oneCat.id);
+}}
+>
+<Text>❌</Text>
+</Pressable> */
+}
+
 const styles = StyleSheet.create({
   savedCatItem: {
+    height: 100,
     margin: 5,
     padding: 10,
     backgroundColor: "rgba(255, 165, 0, 0.5)",
@@ -114,6 +123,32 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 20,
+  },
+  deleteButton: {
+    width: 100,
+    height: "100%",
+    backgroundColor: "red",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: -110,
+  },
+  deleteButtonText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  feedButton: {
+    width: 100,
+    height: "100%",
+    backgroundColor: "green",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    left: -110,
+  },
+  feedButtonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
 
