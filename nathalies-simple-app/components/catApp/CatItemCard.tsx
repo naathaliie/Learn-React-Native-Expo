@@ -19,8 +19,8 @@ const CatItemCard = ({ oneCat, feedCat, deleteCat }: CatCardItemProps) => {
   const translateX = new Animated.Value(0);
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
-    onMoveShouldSetPanResponder: () => true,
-    onPanResponderMove: (e, gestureState) => {
+    /*     onMoveShouldSetPanResponder: () => true,
+     */ onPanResponderMove: (e, gestureState) => {
       if (gestureState.dx < 0) {
         translateX.setValue(gestureState.dx);
       } else if (gestureState.dx > 0) {
