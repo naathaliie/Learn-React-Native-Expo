@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  Pressable,
   StyleSheet,
   Animated,
   PanResponder,
@@ -18,9 +17,15 @@ type CatCardItemProps = {
 const CatItemCard = ({ oneCat, feedCat, deleteCat }: CatCardItemProps) => {
   const translateX = new Animated.Value(0);
   const panResponder = PanResponder.create({
-    onStartShouldSetPanResponder: () => true,
-    /*     onMoveShouldSetPanResponder: () => true,
-     */ onPanResponderMove: (e, gestureState) => {
+    onStartShouldSetPanResponder: (e, gestureState) => {
+      // Tillåt swipe om det är en rörelse
+      return Math.abs(gestureState.dx) > 0 || Math.abs(gestureState.dy) > 0;
+    },
+    onMoveShouldSetPanResponder: (e, gestureState) => {
+      // Aktivera endast om rörelsen är mer än 5 pixlar
+      return Math.abs(gestureState.dx) > 5 || Math.abs(gestureState.dy) > 5;
+    },
+    onPanResponderMove: (e, gestureState) => {
       if (gestureState.dx < 0) {
         translateX.setValue(gestureState.dx);
       } else if (gestureState.dx > 0) {

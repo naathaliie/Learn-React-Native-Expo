@@ -2,11 +2,11 @@ import { useRef, useState } from "react";
 import {
   Alert,
   FlatList,
-  Pressable,
+  Keyboard,
   StyleSheet,
   Text,
   TextInput,
-  TouchableHighlight,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { oneCat, savedCats } from "../../types";
@@ -100,32 +100,35 @@ const CatApp = () => {
   return (
     <View style={styles.container}>
       <View>
-        <View style={styles.inputWrapper}>
-          <View style={styles.inputbox}>
-            <Text>Namn:</Text>
-            <TextInput
-              placeholder="Skriv din katts namn"
-              value={textFromNameField}
-              onChangeText={(text) => {
-                setTextFromNameField(text);
-              }}
-              keyboardType="numbers-and-punctuation"
-              style={styles.inputField}
-            ></TextInput>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inputWrapper}>
+            <View style={styles.inputbox}>
+              <Text>Namn:</Text>
+              <TextInput
+                placeholder="Skriv din katts namn"
+                value={textFromNameField}
+                onChangeText={(text) => {
+                  setTextFromNameField(text);
+                }}
+                keyboardType="numbers-and-punctuation"
+                style={styles.inputField}
+              ></TextInput>
+            </View>
+            <View style={styles.inputbox}>
+              <Text>Ålder:</Text>
+              <TextInput
+                placeholder="Skriv din katts ålder"
+                value={textFromAgeField}
+                onChangeText={(text: string) => {
+                  setTextFromAgeField(text);
+                }}
+                keyboardType="numeric"
+                style={styles.inputField}
+              ></TextInput>
+            </View>
           </View>
-          <View style={styles.inputbox}>
-            <Text>Ålder:</Text>
-            <TextInput
-              placeholder="Skriv din katts ålder"
-              value={textFromAgeField}
-              onChangeText={(text: string) => {
-                setTextFromAgeField(text);
-              }}
-              keyboardType="numeric"
-              style={styles.inputField}
-            ></TextInput>
-          </View>
-        </View>
+        </TouchableWithoutFeedback>
+
         <TouchableBtn
           title="Lägg till katt"
           colorBackground="lightgreen"
@@ -134,6 +137,7 @@ const CatApp = () => {
           onClickFunction={addCatToList}
         />
       </View>
+
       <FlatList
         data={savedCats}
         keyExtractor={(item) => item.id.toString()}
@@ -152,6 +156,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     gap: 10,
+    backgroundColor: "blue",
   },
   inputbox: {
     flex: 1,
