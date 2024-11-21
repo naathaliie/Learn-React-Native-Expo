@@ -32,7 +32,7 @@ const CatApp = () => {
     },
     {
       id: 1002,
-      name: "fluffet",
+      name: "fluffis",
       age: "5",
       hasBeenFed: false,
     },
@@ -44,19 +44,19 @@ const CatApp = () => {
     },
     {
       id: 1004,
-      name: "misse",
+      name: "gurkan",
       age: "2",
       hasBeenFed: false,
     },
     {
       id: 1005,
-      name: "lucky",
+      name: "lilo",
       age: "5",
       hasBeenFed: false,
     },
     {
       id: 1006,
-      name: "lillen",
+      name: "kompis",
       age: "1",
       hasBeenFed: false,
     },
